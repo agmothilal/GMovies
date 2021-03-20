@@ -3,6 +3,7 @@ package com.galvanize.GMovies.integration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galvanize.GMovies.dto.GMovieDto;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -122,6 +123,40 @@ public class MoviesControllerTest {
                 .andExpect(status().isNoContent())
                 .andExpect(content().string("Movie not found"))
                 .andDo(print());
+    }
 
+    /**
+     * Rule: Movie details include title, director, actors, release year, description and star rating.
+     *
+     * Given the GMDB has many movies
+     * When I visit GMDB movies with an existing title
+     * Then I should see that movie's details
+     */
+    @Test
+    public void getMovieByTitleTest() throws Exception {
+        List<GMovieDto> movieList = Arrays.asList(
+                new GMovieDto("Terminator"),
+                new GMovieDto("Jurassic Park"),
+                new GMovieDto("Batman")
+        );
+
+        RequestBuilder postRequest = post("/v1/gmdb/movies").
+                contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(movieList));
+        mockMvc.perform(postRequest).
+                andExpect(status().isCreated()).
+                andExpect(content().string("added all movies"));
+
+        RequestBuilder getRequest = get("/v1/gmdb/movie?name=Superman Returns")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(getRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("title").value("Superman Returns"))
+                .andExpect(jsonPath("director").value("Bryan Singer"))
+                .andExpect(jsonPath("actors").value("Brandon Routh, Kate Bosworth, Kevin Spacey, James Marsden"))
+                .andExpect(jsonPath("release").value(2006))
+                .andExpect(jsonPath("description").value("Superman returns to Earth after spending five years in space examining his homeworld Krypton. But he finds things have changed while he was gone, and he must once again prove himself important to the world."))
+                .andExpect(jsonPath("rating").value(IsNull.nullValue()));
     }
 }
