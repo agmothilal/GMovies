@@ -25,11 +25,11 @@ public class MoviesControllerTest {
      */
     @Test
     public void checkGBDBMoviesAreEmptyTest() throws Exception {
-        RequestBuilder rb = get("/gmdb/movies")
+        RequestBuilder rb = get("/v1/gmdb/movies")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(rb)
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$").doesNotExist());
+            .andExpect(jsonPath("$").isEmpty());
     }
 }
