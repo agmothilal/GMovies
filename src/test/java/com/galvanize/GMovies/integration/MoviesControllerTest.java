@@ -106,13 +106,21 @@ public class MoviesControllerTest {
                 contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(movieList));
         mockMvc.perform(postRequest).
-                andExpect(status().isCreated());
+                andExpect(status().isCreated()).
+                andExpect(content().string("added all movies"));
 
         RequestBuilder getRequest = get("/v1/gmdb/movie?name=Terminator")
                 .contentType(MediaType.APPLICATION_JSON);
+        RequestBuilder getRequest1 = get("/v1/gmdb/movie?name=SuperMan")
+                .contentType(MediaType.APPLICATION_JSON);
+
         mockMvc.perform(getRequest)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("name").value("Terminator"))
+                .andDo(print());
+        mockMvc.perform(getRequest1)
+                .andExpect(status().isNoContent())
+                .andExpect(content().string("Movie not found"))
                 .andDo(print());
 
     }

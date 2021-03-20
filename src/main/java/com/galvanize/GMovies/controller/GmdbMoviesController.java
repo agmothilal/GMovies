@@ -24,4 +24,21 @@ public class GmdbMoviesController {
         gMoviesDto.add(gMovieDto);
         return new ResponseEntity<>(gMovieDto, HttpStatus.CREATED);
     }
+
+    @PostMapping("/gmdb/movies")
+    public ResponseEntity<?> addGmdbMovies(@RequestBody List<GMovieDto> gMovieDto){
+        gMoviesDto.addAll(gMovieDto);
+        return new ResponseEntity<>("added all movies", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/gmdb/movie")
+    public ResponseEntity<?> getGmdbMovies(@RequestParam String name) {
+       GMovieDto gMovieDto = gMoviesDto.stream().filter(movie -> movie.getName().
+               equalsIgnoreCase(name)).findFirst().orElse(null);
+       if(gMovieDto != null){
+       return new ResponseEntity<>(gMovieDto, HttpStatus.OK);}
+       else{
+           return new ResponseEntity<>("Movie not found", HttpStatus.NO_CONTENT);
+       }
+    }
 }
