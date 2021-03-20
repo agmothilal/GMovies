@@ -12,14 +12,16 @@ import java.util.List;
 @RequestMapping("/v1")
 public class GmdbMoviesController {
 
+    private List<GMovieDto> gMoviesDto = new ArrayList<>();
+
     @GetMapping("/gmdb/movies")
     public ResponseEntity<?> getGmdbMovies() {
-        List<GMovieDto> gMoviesDto = new ArrayList<>();
         return new ResponseEntity<>(gMoviesDto, HttpStatus.OK);
     }
 
     @PostMapping("/gmdb/movie")
     public ResponseEntity<?> addGmdbMovie(@RequestBody GMovieDto gMovieDto){
-        return new ResponseEntity<>(gMovieDto,HttpStatus.CREATED);
+        gMoviesDto.add(gMovieDto);
+        return new ResponseEntity<>(gMovieDto, HttpStatus.CREATED);
     }
 }
