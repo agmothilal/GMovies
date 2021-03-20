@@ -1,6 +1,7 @@
 package com.galvanize.GMovies.controller;
 
 import com.galvanize.GMovies.dto.GMovieDto;
+import com.galvanize.GMovies.service.GmdbMoviesService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,12 @@ public class GmdbMoviesController {
 
     private List<GMovieDto> gMoviesDto = new ArrayList<>();
 
+    GmdbMoviesService gmdbMoviesService;
+
+    public GmdbMoviesController(GmdbMoviesService gmdbMoviesService) {
+        this.gmdbMoviesService = gmdbMoviesService;
+    }
+
     @GetMapping("/gmdb/movies")
     public ResponseEntity<?> getGmdbMovies() {
         return new ResponseEntity<>(gMoviesDto, HttpStatus.OK);
@@ -22,7 +29,8 @@ public class GmdbMoviesController {
 
     @PostMapping("/gmdb/movie")
     public ResponseEntity<?> addGmdbMovie(@RequestBody GMovieDto gMovieDto){
-        gMoviesDto.add(gMovieDto);
+        gmdbMoviesService.addMovie(gMovieDto);
+        //gMoviesDto.add(gMovieDto);
         return new ResponseEntity<>(gMovieDto, HttpStatus.CREATED);
     }
 
@@ -34,7 +42,7 @@ public class GmdbMoviesController {
 
     @GetMapping("/gmdb/movie")
     public ResponseEntity<?> getGmdbMovies(@RequestParam String name) {
-        Optional<GMovieDto> gMovieDto = gMoviesDto.stream().filter(movie -> movie.getName().
+        Optional<GMovieDto> gMovieDto = gMoviesDto.stream().filter(movie -> movie.getTitle().
                 equalsIgnoreCase(name)).findFirst();
         if(gMovieDto.isPresent()){
             return new ResponseEntity<>(gMovieDto.get(), HttpStatus.OK);

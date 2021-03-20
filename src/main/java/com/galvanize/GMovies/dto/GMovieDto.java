@@ -8,5 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GMovieDto {
-    private String name;
+    private String title;
+    private String director;
+    private String actors;
+    private Integer release;
+    private String description;
+    private Integer rating;
 }

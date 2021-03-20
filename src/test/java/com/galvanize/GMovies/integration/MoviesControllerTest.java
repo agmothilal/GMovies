@@ -56,7 +56,7 @@ public class MoviesControllerTest {
 
     @Test
     public void addGMDBMoviesTest() throws Exception {
-        GMovieDto gMovieDto = new GMovieDto("Terminator");
+        GMovieDto gMovieDto = new GMovieDto("Terminator","", "", 0, "", null);
         RequestBuilder rb = post("/v1/gmdb/movie").
                 contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(gMovieDto));
@@ -67,13 +67,13 @@ public class MoviesControllerTest {
     }
 
     /**
-     * Given the GMDB has a movie
+     * Given the GMDB has many movies
      * When I visit GMDB movies
-     * Then I should see that movie in GMDB movies
+     * Then I should see all the movies in GMDB movies
      */
     @Test
     public void checkGmdbMoviesTest() throws Exception {
-        GMovieDto gMovieDto = new GMovieDto("Terminator");
+        GMovieDto gMovieDto = new GMovieDto("Terminator","", "", 0, "", null);
 
         RequestBuilder postRequest = post("/v1/gmdb/movie").
                 contentType(MediaType.APPLICATION_JSON).
@@ -91,17 +91,17 @@ public class MoviesControllerTest {
     }
 
     /**
-     * Given the GBDB has many movies
+     * Given the GMDB has a movie
      * When I visit GMDB movies
      * Then I should see that movie in GMDB movies
      */
     @Test
     public void checkGMDBMovieTest() throws Exception {
-       List<GMovieDto> movieList =   Arrays.asList(
-               new GMovieDto("Terminator"),
-               new GMovieDto("Jurassic Park"),
-               new GMovieDto("Batman")
-       );
+        List<GMovieDto> movieList = Arrays.asList(
+                new GMovieDto("Terminator","", "", 0, "", null),
+                new GMovieDto("Jurassic Park","", "", 0, "", null),
+                new GMovieDto("Batman","", "", 0, "", null)
+        );
 
         RequestBuilder postRequest = post("/v1/gmdb/movies").
                 contentType(MediaType.APPLICATION_JSON).
@@ -135,9 +135,9 @@ public class MoviesControllerTest {
     @Test
     public void getMovieByTitleTest() throws Exception {
         List<GMovieDto> movieList = Arrays.asList(
-                new GMovieDto("Terminator"),
-                new GMovieDto("Jurassic Park"),
-                new GMovieDto("Batman")
+                new GMovieDto("Terminator","", "", 0, "", null),
+                new GMovieDto("Jurassic Park","", "", 0, "", null),
+                new GMovieDto("Batman","", "", 0, "", null)
         );
 
         RequestBuilder postRequest = post("/v1/gmdb/movies").
