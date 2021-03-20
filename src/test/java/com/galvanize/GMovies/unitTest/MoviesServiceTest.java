@@ -10,7 +10,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class MoviesServiceTest {
@@ -37,4 +42,31 @@ public class MoviesServiceTest {
         verify(repository).save(entity);
     }
 
+    @Test
+    public void fetchAllMoviesTest() {
+        GMovieEntity entity1 = new GMovieEntity("The Avengers", "", "", 2019, "", null);
+        GMovieEntity entity2 = new GMovieEntity("Superman Returns", "", "", 2019, "", null);
+
+        when(repository.findAll()).thenReturn(Arrays.asList(entity1, entity2));
+
+        List<GMovieDto> moviesDto = service.getAllMovies();
+
+        GMovieDto dto1 = new GMovieDto();
+        dto1.setTitle(entity1.getTitle());
+        dto1.setActors(entity1.getActors());
+        dto1.setDescription(entity1.getDescription());
+        dto1.setRating(entity1.getRating());
+        dto1.setRelease(entity1.getRelease());
+        dto1.setDirector(entity1.getDirector());
+
+        GMovieDto dto2 = new GMovieDto();
+        dto2.setTitle(entity2.getTitle());
+        dto2.setActors(entity2.getActors());
+        dto2.setDescription(entity2.getDescription());
+        dto2.setRating(entity2.getRating());
+        dto2.setRelease(entity2.getRelease());
+        dto2.setDirector(entity2.getDirector());
+
+        assertThat(moviesDto).isEqualTo(Arrays.asList(dto1, dto2));
+    }
 }

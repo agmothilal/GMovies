@@ -6,6 +6,9 @@ import com.galvanize.GMovies.repository.GmdbMoviesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class GmdbMoviesService {
 
@@ -27,5 +30,15 @@ public class GmdbMoviesService {
         entity.setDirector(gMovieDto.getDirector());
 
         this.moviesRepository.save(entity);
+    }
+
+    public List<GMovieDto> getAllMovies() {
+        return this.moviesRepository.findAll().stream().
+                map(movie -> new GMovieDto(movie.getTitle(),
+                        movie.getDirector(),
+                        movie.getActors(),
+                        movie.getRelease(),
+                        movie.getDescription(),
+                        movie.getRating())).collect(Collectors.toList());
     }
 }
