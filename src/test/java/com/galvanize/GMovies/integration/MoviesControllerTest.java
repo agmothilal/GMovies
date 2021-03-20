@@ -215,4 +215,10 @@ public class MoviesControllerTest {
                 andExpect(jsonPath("rating").value(5));
 
     }
+
+    /**
+     * Given a movie with one 5 star rating and one 3 star rating
+     * When I view the movie details
+     * Then I expect the star rating to be 4.
+     */
 }
