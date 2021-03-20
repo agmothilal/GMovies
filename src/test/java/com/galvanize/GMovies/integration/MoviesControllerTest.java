@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -30,6 +31,7 @@ public class MoviesControllerTest {
 
         mockMvc.perform(rb)
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$").isEmpty());
+            .andExpect(jsonPath("$").isEmpty())
+            .andDo(print());
     }
 }
