@@ -25,7 +25,7 @@ public class MoviesControllerTest {
     Then I should see no movies
      */
     @Test
-    public void checkGBDBMoviesAreEmptyTest() throws Exception {
+    public void checkGMDBMoviesAreEmptyTest() throws Exception {
         RequestBuilder rb = get("/v1/gmdb/movies")
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -33,5 +33,21 @@ public class MoviesControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$").isEmpty())
             .andDo(print());
+    }
+
+    /**
+     * Given a new movie has released
+     * When I submit this new movie to GMDB movies
+     * Then I should see that movie in GMDB movies
+     */
+
+    @Test
+    public void addGMDBMoviesTest() throws Exception {
+        RequestBuilder rb = post("/v1/gmdb/movie").
+                contentType(MediaType.APPLICATION_JSON).
+                content("{}");
+        mockMvc.perform(rb).
+                andExpect(status().isCreated()).
+                andExpect(content().string("added movie"));
     }
 }
