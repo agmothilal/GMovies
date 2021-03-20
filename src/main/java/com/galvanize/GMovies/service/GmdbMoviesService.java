@@ -59,4 +59,31 @@ public class GmdbMoviesService {
 
         this.moviesRepository.saveAll(entities);
     }
+
+    public GMovieDto updateMovie(GMovieDto gMovieDto) {
+        GMovieEntity gEntity= moviesRepository.findAll().stream().
+                filter(entity->entity.getTitle().equalsIgnoreCase(gMovieDto.getTitle())).findFirst().get();
+
+       gEntity.setRating(gMovieDto.getRating());
+        this.moviesRepository.save(gEntity);
+
+         return ConvertToDto(this.moviesRepository.findById(gEntity.getId()).get());
+    }
+
+    private static GMovieDto ConvertToDto(GMovieEntity entity) {
+        return new GMovieDto(entity.getTitle(),
+                entity.getDirector(),
+                entity.getActors(),
+                entity.getRelease(),
+                entity.getDescription(),
+                entity.getRating());
+    }
+    private GMovieEntity ConvertToEntity(GMovieDto dto) {
+        return new GMovieEntity(dto.getTitle(),
+                dto.getDirector(),
+                dto.getActors(),
+                dto.getRelease(),
+                dto.getDescription(),
+                dto.getRating());
+    }
 }

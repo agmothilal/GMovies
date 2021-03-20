@@ -4,16 +4,21 @@ import com.galvanize.GMovies.dto.GMovieDto;
 import com.galvanize.GMovies.entity.GMovieEntity;
 import com.galvanize.GMovies.repository.GmdbMoviesRepository;
 import com.galvanize.GMovies.service.GmdbMoviesService;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -68,5 +73,19 @@ public class MoviesServiceTest {
         dto2.setDirector(entity2.getDirector());
 
         assertThat(moviesDto).isEqualTo(Arrays.asList(dto1, dto2));
+    }
+
+    @Test
+    public void updateMovieTest(){
+        GMovieEntity entity1 = new GMovieEntity("The Avengers", "", "", 2019, "", null);
+        entity1.setId(123l);
+        GMovieEntity entity2 = new GMovieEntity("Superman Returns", "", "", 2019, "", null);
+
+        when(repository.findAll()).thenReturn(Arrays.asList(entity1, entity2));
+
+        when(repository.findById(any(Long.class))).thenReturn(Optional.of(entity1));
+       GMovieDto movieDto= service.updateMovie(new GMovieDto("The Avengers", "", "", 2019, "", 5));
+       verify(repository).save(entity1);
+       assertThat(movieDto).isEqualTo(new GMovieDto("The Avengers", "", "", 2019, "", 5));
     }
 }
