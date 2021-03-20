@@ -21,7 +21,7 @@ public class GmdbMoviesController {
 
     @PostMapping("/gmdb/movie")
     public ResponseEntity<?> addGmdbMovie(@RequestBody GMovieDto gMovieDto){
-        return new ResponseEntity<>("added movie",HttpStatus.CREATED);
+        return new ResponseEntity<>(gMovieDto,HttpStatus.CREATED);
     }
 
 

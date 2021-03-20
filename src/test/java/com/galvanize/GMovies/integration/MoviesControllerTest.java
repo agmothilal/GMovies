@@ -1,5 +1,8 @@
 package com.galvanize.GMovies.integration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.galvanize.GMovies.dto.GMovieDto;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,6 +21,9 @@ public class MoviesControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     /*
     Given the GBDB is empty
@@ -43,11 +49,12 @@ public class MoviesControllerTest {
 
     @Test
     public void addGMDBMoviesTest() throws Exception {
+        GMovieDto gMovieDto = new GMovieDto("Terminator");
         RequestBuilder rb = post("/v1/gmdb/movie").
                 contentType(MediaType.APPLICATION_JSON).
-                content("{}");
+                content(objectMapper.writeValueAsString(gMovieDto));
         mockMvc.perform(rb).
                 andExpect(status().isCreated()).
-                andExpect(content().string("added movie"));
+                andExpect(jsonPath("name").value("Terminator"));
     }
 }
