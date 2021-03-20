@@ -1,5 +1,6 @@
 package com.galvanize.GMovies.integration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galvanize.GMovies.dto.GMovieDto;
 import org.hamcrest.core.IsNull;
@@ -182,5 +183,36 @@ public class MoviesControllerTest {
         mockMvc.perform(getRequest)
                 .andExpect(status().isNoContent())
                 .andExpect(content().string("Movie not found"));
+    }
+
+    /**
+     * Given an existing movie
+     * When I submit a 5 star rating
+     * Then I can see it in the movie details.
+     *
+     */
+
+    @Test
+    public void updateMovieRatingTest() throws Exception {
+        GMovieDto dto1 =  new GMovieDto("The Avengers","Joss Whedon", "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth", 2012, "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.", null);
+        List<GMovieDto> movieList = Arrays.asList(
+                dto1,
+                new GMovieDto("Superman Returns","Bryan Singer", "Brandon Routh, Kate Bosworth, Kevin Spacey, James Marsden", 2006, "Superman returns to Earth after spending five years in space examining his homeworld Krypton. But he finds things have changed while he was gone, and he must once again prove himself important to the world.", null)
+        );
+
+        RequestBuilder postRequest = post("/v1/gmdb/movies").
+                contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(movieList));
+        mockMvc.perform(postRequest).
+                andExpect(status().isCreated()).
+                andExpect(content().string("added all movies"));
+        dto1.setRating(5);
+        RequestBuilder putRequest = put("/v1/gmdb/movie?name=The Avengers")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(dto1));
+
+        mockMvc.perform(putRequest).andExpect(status().isOk()).
+                andExpect(jsonPath("title").value("The Avengers")).
+                andExpect(jsonPath("rating").value(5));
+
     }
 }
