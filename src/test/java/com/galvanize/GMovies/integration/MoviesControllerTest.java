@@ -135,9 +135,8 @@ public class MoviesControllerTest {
     @Test
     public void getMovieByTitleTest() throws Exception {
         List<GMovieDto> movieList = Arrays.asList(
-                new GMovieDto("Terminator","", "", 0, "", null),
-                new GMovieDto("Jurassic Park","", "", 0, "", null),
-                new GMovieDto("Batman","", "", 0, "", null)
+                new GMovieDto("The Avengers","Joss Whedon", "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth", 2012, "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.", null),
+                new GMovieDto("Superman Returns","Bryan Singer", "Brandon Routh, Kate Bosworth, Kevin Spacey, James Marsden", 2006, "Superman returns to Earth after spending five years in space examining his homeworld Krypton. But he finds things have changed while he was gone, and he must once again prove himself important to the world.", null)
         );
 
         RequestBuilder postRequest = post("/v1/gmdb/movies").
