@@ -194,10 +194,16 @@ public class MoviesControllerTest {
 
     @Test
     public void updateMovieRatingTest() throws Exception {
-        GMovieDto dto1 =  new GMovieDto("The Avengers","Joss Whedon", "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth", 2012, "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.", null);
+        GMovieDto dto1 = new GMovieDto("The Avengers", "Joss Whedon",
+                "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth", 2012,
+                "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.",
+                null);
         List<GMovieDto> movieList = Arrays.asList(
                 dto1,
-                new GMovieDto("Superman Returns","Bryan Singer", "Brandon Routh, Kate Bosworth, Kevin Spacey, James Marsden", 2006, "Superman returns to Earth after spending five years in space examining his homeworld Krypton. But he finds things have changed while he was gone, and he must once again prove himself important to the world.", null)
+                new GMovieDto("Superman Returns", "Bryan Singer",
+                        "Brandon Routh, Kate Bosworth, Kevin Spacey, James Marsden", 2006,
+                        "Superman returns to Earth after spending five years in space examining his homeworld Krypton. But he finds things have changed while he was gone, and he must once again prove himself important to the world.",
+                        null)
         );
 
         RequestBuilder postRequest = post("/v1/gmdb/movies").
@@ -213,7 +219,6 @@ public class MoviesControllerTest {
         mockMvc.perform(putRequest).andExpect(status().isOk()).
                 andExpect(jsonPath("title").value("The Avengers")).
                 andExpect(jsonPath("rating").value(5));
-
     }
 
     /**
@@ -221,4 +226,32 @@ public class MoviesControllerTest {
      * When I view the movie details
      * Then I expect the star rating to be 4.
      */
+    @Test
+    public void usersUpdatingMovieRatingTest() throws Exception {
+        // Setup movie
+        GMovieDto gMovieDto = new GMovieDto("The Avengers", "Joss Whedon",
+                "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth", 2012,
+                "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.",
+                null);
+        RequestBuilder rb = post("/v1/gmdb/movie").
+                contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(gMovieDto));
+
+        mockMvc.perform(rb).
+                andExpect(status().isCreated());
+        gMovieDto.setRating(5);
+        RequestBuilder putRequest = put("/v1/gmdb/movie?name=The Avengers")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(gMovieDto));
+
+        mockMvc.perform(putRequest).andExpect(status().isOk()).
+                andExpect(jsonPath("title").value("The Avengers")).
+                andExpect(jsonPath("rating").value(5));
+
+        gMovieDto.setRating(3);
+        putRequest = put("/v1/gmdb/movie?name=The Avengers")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(gMovieDto));
+        mockMvc.perform(putRequest).andExpect(status().isOk()).
+                andExpect(jsonPath("title").value("The Avengers")).
+                andExpect(jsonPath("rating").value(4));
+    }
 }

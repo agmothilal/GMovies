@@ -76,7 +76,7 @@ public class MoviesServiceTest {
     }
 
     @Test
-    public void updateMovieTest(){
+    public void updateMovieTest() {
         GMovieEntity entity1 = new GMovieEntity("The Avengers", "", "", 2019, "", null);
         entity1.setId(123l);
         GMovieEntity entity2 = new GMovieEntity("Superman Returns", "", "", 2019, "", null);
@@ -84,8 +84,8 @@ public class MoviesServiceTest {
         when(repository.findAll()).thenReturn(Arrays.asList(entity1, entity2));
 
         when(repository.findById(any(Long.class))).thenReturn(Optional.of(entity1));
-       GMovieDto movieDto= service.updateMovie(new GMovieDto("The Avengers", "", "", 2019, "", 5));
-       verify(repository).save(entity1);
-       assertThat(movieDto).isEqualTo(new GMovieDto("The Avengers", "", "", 2019, "", 5));
+        GMovieDto movieDto = service.updateMovie(new GMovieDto("The Avengers", "", "", 2019, "", 5));
+        verify(repository).save(entity1);
+        assertThat(movieDto).isEqualTo(new GMovieDto("The Avengers", "", "", 2019, "", 5));
     }
 }
