@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1")
@@ -33,10 +34,11 @@ public class GmdbMoviesController {
 
     @GetMapping("/gmdb/movie")
     public ResponseEntity<?> getGmdbMovies(@RequestParam String name) {
-       GMovieDto gMovieDto = gMoviesDto.stream().filter(movie -> movie.getName().
-               equalsIgnoreCase(name)).findFirst().orElse(null);
-       if(gMovieDto != null){
-       return new ResponseEntity<>(gMovieDto, HttpStatus.OK);}
+        Optional<GMovieDto> gMovieDto = gMoviesDto.stream().filter(movie -> movie.getName().
+                equalsIgnoreCase(name)).findFirst();
+        if(gMovieDto.isPresent()){
+            return new ResponseEntity<>(gMovieDto.get(), HttpStatus.OK);
+        }
        else{
            return new ResponseEntity<>("Movie not found", HttpStatus.NO_CONTENT);
        }
