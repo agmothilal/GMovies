@@ -54,7 +54,7 @@ public class GmdbMoviesController {
 
     @PutMapping("/gmdb/movie")
     public ResponseEntity<?> updateGmdbMovie(@RequestBody GMovieDto gMovieDto) {
-       GMovieDto movieDto= gmdbMoviesService.updateMovie(gMovieDto);
-            return new ResponseEntity<>(movieDto, HttpStatus.OK);
+        GMovieDto movieDto = gmdbMoviesService.updateMovie(gMovieDto);
+        return new ResponseEntity<>(movieDto, HttpStatus.OK);
     }
 }

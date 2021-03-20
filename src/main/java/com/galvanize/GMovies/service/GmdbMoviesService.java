@@ -63,8 +63,11 @@ public class GmdbMoviesService {
     public GMovieDto updateMovie(GMovieDto gMovieDto) {
         GMovieEntity gEntity = moviesRepository.findAll().stream().
                 filter(entity -> entity.getTitle().equalsIgnoreCase(gMovieDto.getTitle())).findFirst().get();
+        Integer averageRating = gEntity.getRating() == null ?
+                gMovieDto.getRating() :
+                (gEntity.getRating() + gMovieDto.getRating()) / 2;
 
-        gEntity.setRating(gMovieDto.getRating());
+        gEntity.setRating(averageRating);
         this.moviesRepository.save(gEntity);
 
         return ConvertToDto(this.moviesRepository.findById(gEntity.getId()).get());
