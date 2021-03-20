@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1")
@@ -23,6 +22,4 @@ public class GmdbMoviesController {
     public ResponseEntity<?> addGmdbMovie(@RequestBody GMovieDto gMovieDto){
         return new ResponseEntity<>(gMovieDto,HttpStatus.CREATED);
     }
-
-
 }

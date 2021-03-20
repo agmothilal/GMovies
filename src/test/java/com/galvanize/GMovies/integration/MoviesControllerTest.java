@@ -25,10 +25,10 @@ public class MoviesControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    /*
-    Given the GBDB is empty
-    When I visit GMDB movies
-    Then I should see no movies
+    /**
+     *  Given the GBDB is empty
+     *     When I visit GMDB movies
+     *     Then I should see no movies
      */
     @Test
     public void checkGMDBMoviesAreEmptyTest() throws Exception {
@@ -53,8 +53,32 @@ public class MoviesControllerTest {
         RequestBuilder rb = post("/v1/gmdb/movie").
                 contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(gMovieDto));
+
         mockMvc.perform(rb).
                 andExpect(status().isCreated()).
                 andExpect(jsonPath("name").value("Terminator"));
+    }
+
+    /**
+     * Given the GMDB has a movie
+     * When I visit GMDB movies
+     * Then I should see that movie in GMDB movies
+     */
+    @Test
+    public void checkGmdbMoviesTest() throws Exception {
+        GMovieDto gMovieDto = new GMovieDto("Terminator");
+
+        RequestBuilder postRequest = post("/v1/gmdb/movie").
+                contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(gMovieDto));
+        RequestBuilder getRequest = get("/v1/gmdb/movies")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(postRequest).
+                andExpect(status().isCreated());
+        mockMvc.perform(getRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("name").value("Terminator"))
+                .andDo(print());
     }
 }
