@@ -3,10 +3,7 @@ package com.galvanize.GMovies.controller;
 import com.galvanize.GMovies.dto.GMovieDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,5 +18,11 @@ public class GmdbMoviesController {
         List<GMovieDto> gMoviesDto = new ArrayList<>();
         return new ResponseEntity<>(gMoviesDto, HttpStatus.OK);
     }
+
+    @PostMapping("/gmdb/movie")
+    public ResponseEntity<?> addGmdbMovie(@RequestBody GMovieDto gMovieDto){
+        return new ResponseEntity<>("added movie",HttpStatus.CREATED);
+    }
+
 
 }
